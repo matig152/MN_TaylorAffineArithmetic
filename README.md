@@ -4,5 +4,5 @@ Forensic Science International](https://www.sciencedirect.com/science/article/ab
 
 ## Contents
 - `interval.py` - basic interval arithmetic, as described in Appendix A
-- `affine_forms.py` - affine numbers arithmetic, as described in Appendix B
+- `affine_form.py` - affine numbers arithmetic, as described in Appendix B
 - 
