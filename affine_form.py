@@ -44,3 +44,39 @@ class AffineForm():
         for i in range(len(self.noise_terms)):
             new_noise_terms.append(self.noise_terms[i] * scalar)
         return AffineForm(scalar * self.center, new_noise_terms)
+    
+
+    # MULTIPLICATION USING CHEBYSHEV AFFINE APPROXIMATION (EQ. 8, APPENDIX C)
+    def __mul__(self, other):
+        if len(self.noise_terms) != len(other.noise_terms):
+            raise ValueError("Number of noise terms does not match.")
+
+        # CENTER
+        new_center = self.center * other.center
+        
+        # LINEAR TERMS
+        new_noise_terms = []
+        for xi, yi in zip(self.noise_terms, other.noise_terms):
+            new_noise_terms.append(self.center * xi + other.center * yi)
+
+        # NON-LINEAR TERMS (Q)
+        terms = []
+        for i in range(len(self.noise_terms)):
+            for j in range(len(self.noise_terms)):
+                coeff = self.noise_terms[i] * other.noise_terms[j]
+                if i == j:
+                    # e_i^2 in [0,1], so term in [0, coeff]
+                    terms.append((min(0, coeff), max(0, coeff)))
+                else:
+                    # e_i * e_j in [-1,1], so term in [-|coeff|, |coeff|]
+                    terms.append((-abs(coeff), abs(coeff)))
+
+
+        a = sum(term[0] for term in terms)
+        b = sum(term[1] for term in terms)
+
+        new_center += (a + b) / 2
+        nonlinear_error = (b - a) / 2
+        new_noise_terms.append(nonlinear_error)
+
+        return AffineForm(new_center, new_noise_terms)
