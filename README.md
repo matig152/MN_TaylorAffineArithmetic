@@ -5,4 +5,4 @@ Forensic Science International](https://www.sciencedirect.com/science/article/ab
 ## Contents
 - `interval.py` - basic interval arithmetic, as described in Appendix A
 - `affine_form.py` - affine numbers arithmetic, as described in Appendix B
-- 
+- `compute_bounds.py` - implements a function for computing polynomial function bounds based on provided affine forms and a coefficient matrix (or tensor), as described in Appendix C. (DO ZROBIENIA: zaimplementować dla dwóch i jednej zmiennej, na razie jest tylko dla trzech)
