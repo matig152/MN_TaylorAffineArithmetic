@@ -127,8 +127,9 @@ def compute_bounds_one_var(y, A):
     B = np.zeros((A.shape[0], A.shape[0]))
     for j in range(B.shape[1]):
         B[0, j] = 1
-    C = build_C_matrix(A.shape[0], y.center, y.noise_terms[0])
-    W = B @ A @ C
+    C = build_C_matrix(A.shape[0],A.shape[0], y.center, y.noise_terms[0])
+    W = np.matmul(B, A)
+    W = np.matmul(W, C)
 
     m = W.shape[0]
     f_upper = W[0]
@@ -137,7 +138,7 @@ def compute_bounds_one_var(y, A):
     for j in range(1,m):
         if j % 2 == 0:
             f_upper += max(0, W[j])
-            f_lower += min(0, W[j])
+            f_lower += max(0, W[j])
         else:
             f_upper += abs(W[j])
             f_lower -= abs(W[j])
@@ -169,9 +170,7 @@ if __name__ == "__main__":
     z = AffineForm(3, [0.05])
     # EXAMPLE COEFF TENSOR (A)
     
-    # A = np.array([[[1, 2, 3], [4, 5, 6]], [[1, 2, 3], [4, 5, 6]]])
-    
-    A = np.array([2, 1]) # f(x) = x + 2
+    A = np.array([[[1, 2, 3], [4, 5, 6]], [[1, 2, 3], [4, 5, 6]]])
 
-    f_lower, f_upper = compute_bounds([x], A)
+    f_lower, f_upper = compute_bounds([x, y, z], A)
     print(f'Function in [{f_lower}, {f_upper}]')

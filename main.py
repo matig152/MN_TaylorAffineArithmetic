@@ -41,4 +41,4 @@ for i in range(n + 1):
         taylor_series += term
 
 taylor_series = sp.simplify(taylor_series)
-print(taylor_series)
+sp.pprint(taylor_series)
