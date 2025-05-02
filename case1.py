@@ -11,31 +11,9 @@ mu, s = sp.symbols("mu s")
 mu0 = 0.7
 s0 = 0.9
 f = sp.sqrt(mu * s)
+order = 3
 
-# Define expansion order
-n = 3
-
-# Compute Taylor expansion around (mu0, s0)
-taylor_series = 0
-for i in range(n + 1):
-    for j in range(n + 1 - i):
-        deriv = f.diff(mu, i).diff(s, j).subs({mu: mu0, s: s0})
-        term = deriv / (sp.factorial(i) * sp.factorial(j)) * (mu - mu0)**i * (s - s0)**j
-        taylor_series += term
-
-taylor_series = sp.expand(taylor_series)
-print(taylor_series)
-
-
-# Extract coefficients into matrix H
-H = sp.Matrix.zeros(n + 1, n + 1)
-for i in range(n + 1):
-    for j in range(n + 1 - i):
-        coeff = taylor_series.coeff((mu - mu0)**i * (s - s0)**j)
-        H[i, j] = coeff
-
-# Display the result
-sp.pprint(H)
+# TUTAJ ZAIMPLEMENTOWAĆ AUTOMATYCZNE ROZWINIĘCIE WE WZÓR TAYLORA
 
 # APPROXIMATE FUNCTION
 mu = Interval(0.65, 0.75)
@@ -44,7 +22,10 @@ s = s.standardize()
 
 mu_affine = AffineForm.from_interval(mu)
 s_affine = AffineForm.from_interval(s)
-H = np.array(H)
+H = np.array([[-0.421, 2.0464, -2.2656, 0.9135], 
+              [0.5346, 0.6681, -0.1043, 0], 
+              [-0.3819, -0.1193, 0, 0], 
+              [0.1364, 0, 0, 0]])
 
 
 f_lower, f_upper = compute_bounds([mu_affine, s_affine], H)
