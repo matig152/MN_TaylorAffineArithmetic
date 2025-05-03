@@ -3,7 +3,8 @@ import numpy as np
 from interval import Interval
 from affine_form import AffineForm
 from compute_bounds import compute_bounds
-
+from test import compute_H
+from taylor_expansion import taylor_expansion
 
 
 # TAYLOR EXPANSION
@@ -22,11 +23,15 @@ s = s.standardize()
 
 mu_affine = AffineForm.from_interval(mu)
 s_affine = AffineForm.from_interval(s)
-H = np.array([[-0.421, 2.0464, -2.2656, 0.9135], 
-              [0.5346, 0.6681, -0.1043, 0], 
-              [-0.3819, -0.1193, 0, 0], 
-              [0.1364, 0, 0, 0]])
+# H = np.array([[-0.421, 2.0464, -2.2656, 0.9135], 
+#               [0.5346, 0.6681, -0.1043, 0], 
+#               [-0.3819, -0.1193, 0, 0], 
+#               [0.1364, 0, 0, 0]])
 
+mu, s = sp.symbols("mu s")
+f1 = sp.sqrt(mu * s)
+mu0, s0 = 0.7, 0.9
+_, H = taylor_expansion(f1, [mu, s], [mu0, s0], 4)
 
 f_lower, f_upper = compute_bounds([mu_affine, s_affine], H)
 
